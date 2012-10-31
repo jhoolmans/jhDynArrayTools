@@ -1,0 +1,3 @@
+[submodule "vfxcmake"]
+	path = vfxcmake
+	url = https://github.com/jhoolmans/vfxcmake.git

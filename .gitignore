@@ -1,0 +1,10 @@
+# IGNORE FILE
+#
+# Build directory
+build/*
+
+# Compiler files
+*.so
+*.bundle
+*.o
+*.a
