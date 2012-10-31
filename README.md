@@ -65,9 +65,7 @@ This process will set up your files that compile the source code. From this poin
 + cd to the source directory containing this readme file.
 + run the following code:
 	
-	mkdir build
-	cmake ..
-	make
+	mkdir build; cd build; cmake ..; make
 	
 + You can skip the next section as you are done compiling from this point :)
 
