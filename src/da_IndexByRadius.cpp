@@ -52,9 +52,9 @@ MStatus DA_IndexByRadius::initialize()
     //
     // Inputs
     //
-    //aInPointArray = tAttr.create("inPointArray", "ipa", MFnData::kPointArray);
-    //stat = addAttribute(aInPointArray);
-    //CHECK_MSTATUS(stat);
+    aInPointArray = tAttr.create("inPositionPP", "ipp", MFnData::kVectorArray);
+    stat = addAttribute(aInPointArray);
+    CHECK_MSTATUS(stat);
 
     aInDynamicArray = tAttr.create("inDynamicArray", "ida", MFnData::kDynArrayAttrs);
     stat = addAttribute(aInDynamicArray);
@@ -106,7 +106,7 @@ MStatus DA_IndexByRadius::initialize()
     //
     // Attributes affects
     //
-    //attributeAffects(aInPointArray, aOutDynamicArray);
+    attributeAffects(aInPointArray, aOutDynamicArray);
     attributeAffects(aInDynamicArray, aOutDynamicArray);
     attributeAffects(aInMatrix, aOutDynamicArray);
     attributeAffects(aRadius, aOutDynamicArray);
@@ -149,7 +149,10 @@ MStatus DA_IndexByRadius::compute(const MPlug &plug, MDataBlock &data)
     double dRadius = data.inputValue(aRadius).asDouble();
     int iIndexMin = data.inputValue(aIndexMin).asInt();
     int iIndexMax = data.inputValue(aIndexMax).asInt();
-
+    
+    MObject inPosArray = data.inputValue(aInPointArray).data();
+    MVectorArray inPositions;
+    
     //
     // Outputs
     //
@@ -165,44 +168,76 @@ MStatus DA_IndexByRadius::compute(const MPlug &plug, MDataBlock &data)
     MFnArrayAttrsData::Type arrayType;
     bool hasPos = outArray.checkArrayExist("position", arrayType, &stat);
     CHECK_MSTATUS(stat);
+    
+    bool valid = true;
 
     if ( (hasPos == false) || (arrayType != MFnArrayAttrsData::kVectorArray) ) {
-        MGlobal::displayWarning("Input array is missing position data");
-    } else {
-        MPoint origin(0,0,0);
-        origin *= inMatrix;
-
-        // loop through vectors
-        MPoint pt;
-
-        // set data and set length to match position
-        MVectorArray inPositionArray = outArray.getVectorData("position");
-        outIndexPP.setLength(inPositionArray.length());
-
-        for(int i = 0; i < inPositionArray.length(); i++)
-        {
-            pt.x = inPositionArray[i].x;
-            pt.y = inPositionArray[i].y;
-            pt.z = inPositionArray[i].z;
-
-            double dist = pt.distanceTo(origin);
-            double index = double(iIndexMin) + (dist / dRadius * double(iIndexMax - iIndexMin));
-
-            if(index > (double)iIndexMax)
-                index = (double)iIndexMax;
-
-            outIndexPP[i] = index;
+        
+        if (inPosArray.isNull() == false) {
+            MFnVectorArrayData fnVector(inPosArray);
+            fnVector.copyTo(inPositions);
+            
+            // Copy data to dynamic array
+            MVectorArray tmpArray = outArray.vectorArray("position");
+            tmpArray.copy(inPositions);
+        } else {
+            return MS::kFailure;
         }
+    } else {
+        inPositions = outArray.getVectorData("position");
+    }
+    
+    MPoint origin(0,0,0);
+    origin *= inMatrix;
 
-        MDoubleArray dblArray = outArray.doubleArray("objectIndex");
-        dblArray.copy(outIndexPP);
+    // loop through vectors
+    MPoint pt;
+
+    // set data and set length to match position
+    outIndexPP.setLength(inPositions.length());
+
+    for(int i = 0; i < inPositions.length(); i++)
+    {
+        pt.x = inPositions[i].x;
+        pt.y = inPositions[i].y;
+        pt.z = inPositions[i].z;
+
+        double dist = pt.distanceTo(origin);
+        double index = double(iIndexMin) + (dist / dRadius * double(iIndexMax - iIndexMin));
+
+        if(index > (double)iIndexMax)
+            index = (double)iIndexMax;
+
+        outIndexPP[i] = index;
     }
 
+    
+    //
+    // Output
+    //
+    
+    // Copy data to dynamic array
+    MDoubleArray dblArray = outArray.doubleArray("objectIndex");
+    dblArray.copy(outIndexPP);
+
+    // Set output dynamic array
     MDataHandle dataOutArray = data.outputValue(aOutDynamicArray);
     dataOutArray.set(outArray.object());
 
-    //MDataHandle dataIndexPP = data.outputValue(aOutIndexPP);
+    
+    // Turn double array into MObject
+    MFnDoubleArrayData fnDouble;
+    fnDouble.create();
+    fnDouble.set(dblArray);
+    
+    // Set output indexPP
+    MDataHandle dataIndexPP = data.outputValue(aOutIndexPP);
+    dataIndexPP.set(fnDouble.object());
 
+    
+    //
+    // Clean
+    //
     data.setClean(aOutDynamicArray);
     data.setClean(aOutIndexPP);
 

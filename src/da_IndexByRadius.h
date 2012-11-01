@@ -28,9 +28,13 @@
 #include <maya/MDataHandle.h>
 #include <maya/MPlug.h>
 
+#include <maya/MVectorArray.h>
+#include <maya/MFnVectorArrayData.h>
+
 #include <maya/MPointArray.h>
 #include <maya/MPoint.h>
 
+#include <maya/MFnDoubleArrayData.h>
 #include <maya/MDoubleArray.h>
 
 #include <maya/MMatrix.h>
