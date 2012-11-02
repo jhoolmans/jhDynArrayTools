@@ -63,6 +63,7 @@ MStatus DA_ProjectToSurface::initialize()
     // Outputs
     //
     aOutDynamicArray = tAttr.create("outDynamicArray", "oda", MFnData::kDynArrayAttrs);
+    tAttr.setWritable(false);
     stat = addAttribute(aOutDynamicArray);
     CHECK_MSTATUS(stat);
 
