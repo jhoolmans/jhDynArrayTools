@@ -22,6 +22,10 @@
 //
 // Static Attributes
 //
+MObject DA_ProjectToSurface::aInDynamicArray;
+MObject DA_ProjectToSurface::aInVector;
+MObject DA_ProjectToSurface::aUseNormals;
+MObject DA_ProjectToSurface::aOutDynamicArray;
 
 
 // Constructor
@@ -34,25 +38,40 @@ DA_ProjectToSurface::~DA_ProjectToSurface(){}
 MStatus DA_ProjectToSurface::initialize()
 {
     MStatus stat;
+    MFnTypedAttribute tAttr;
+    MFnNumericAttribute nAttr;
 
     //
     // Inputs
     //
+    aInDynamicArray = tAttr.create("inDynamicArray", "ida", MFnData::kDynArrayAttrs);
+    stat = addAttribute(aInDynamicArray);
+    CHECK_MSTATUS(stat);
 
+    aInVector = nAttr.createPoint("inVector", "ivec");
+    stat = addAttribute(aInVector);
+    CHECK_MSTATUS(stat);
 
     //
     // Controls
     //
-
+    aUseNormals = nAttr.create("useNormals", "nrm", MFnNumericData::kBoolean);
+    stat = addAttribute(aUseNormals);
+    CHECK_MSTATUS(stat);
 
     //
     // Outputs
     //
-
+    aOutDynamicArray = tAttr.create("outDynamicArray", "oda", MFnData::kDynArrayAttrs);
+    stat = addAttribute(aOutDynamicArray);
+    CHECK_MSTATUS(stat);
 
     //
     // Attributes affects
     //
+    attributeAffects(aInDynamicArray, aOutDynamicArray);
+    attributeAffects(aInVector, aOutDynamicArray);
+    attributeAffects(aUseNormals, aOutDynamicArray);
 
     return stat;
 }
@@ -67,6 +86,23 @@ void * DA_ProjectToSurface::creator()
 MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
 {
     MStatus stat;
+    if (plug != aOutDynamicArray)
+        return MS::kFailure;
+
+    //
+    // Get inputs
+    //
+
+
+    return stat;
+}
+
+
+// Validate if array matches our requirements
+MStatus DA_ProjectToSurface::validateArray(const MFnArrayAttrsData& array)
+{
+    MStatus stat;
+
     return stat;
 }
 

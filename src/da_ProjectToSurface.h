@@ -34,17 +34,12 @@
 #include <maya/MPointArray.h>
 #include <maya/MPoint.h>
 
-#include <maya/MFnDoubleArrayData.h>
-#include <maya/MDoubleArray.h>
-
 #include <maya/MMatrix.h>
 
 #include <maya/MFnArrayAttrsData.h>
 
 #include <maya/MFnTypedAttribute.h>
 #include <maya/MFnNumericAttribute.h>
-#include <maya/MFnMatrixAttribute.h>
-#include <maya/MFnCompoundAttribute.h>
 
 #include "dynArrayUtils.h"
 
@@ -60,17 +55,19 @@ public:
     static MStatus initialize();
 
     virtual MStatus compute(const MPlug &plug, MDataBlock &data);
+    MStatus validateArray(const MFnArrayAttrsData &array);
 
     static MTypeId id;
 
     // inputs
-    //static MObject aInput
+    static MObject aInDynamicArray;
+    static MObject aInVector;
 
     // controls
-    //static MObject aControl;
+    static MObject aUseNormals;
 
     // outputs
-    //static MObject aOutput;
+    static MObject aOutDynamicArray;
 };
 
 #endif /*DA_PROJECTTOSURFACE_H*/

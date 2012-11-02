@@ -24,6 +24,9 @@
 #include "da_IndexByRadius.h"
 MTypeId DA_IndexByRadius::id(0x001178BF);
 
+#include "da_ProjectToSurface.h"
+MTypeId DA_ProjectToSurface::id(0x001178BE);
+
 
 MStatus initializePlugin(MObject obj)
 {
