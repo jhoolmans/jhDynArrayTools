@@ -33,10 +33,12 @@
 
 #include <maya/MPointArray.h>
 #include <maya/MPoint.h>
+#include <maya/MFloatPoint.h>
 
 #include <maya/MMatrix.h>
 
 #include <maya/MFnArrayAttrsData.h>
+#include <maya/MFnMesh.h>
 
 #include <maya/MFnTypedAttribute.h>
 #include <maya/MFnNumericAttribute.h>

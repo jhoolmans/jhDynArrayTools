@@ -77,6 +77,7 @@ MStatus DA_ProjectToSurface::initialize()
     // Attributes affects
     //
     attributeAffects(aInDynamicArray, aOutDynamicArray);
+    attributeAffects(aInSurface, aOutDynamicArray);
     attributeAffects(aInVector, aOutDynamicArray);
     attributeAffects(aUseNormals, aOutDynamicArray);
 
@@ -100,6 +101,81 @@ MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
     // Get inputs
     //
 
+    // Surface
+    MDataHandle inSurfaceData = data.inputValue(aInSurface);
+    if(inSurfaceData.type() != MFnData::kMesh)
+        return MS::kFailure;
+
+    MObject inSurfaceMesh = inSurfaceData.asMesh();
+    MFnMesh fnMesh(inSurfaceMesh);
+
+    // Dynamic Array
+    MDataHandle inDynamicArrayData = data.inputValue(aInDynamicArray);
+    if(inDynamicArrayData.type() != MFnData::kDynArrayAttrs)
+        return MS::kFailure;
+
+    MFnArrayAttrsData inDynamicArray(inDynamicArrayData.data());
+
+    // Validate array
+    if(validateArray(inDynamicArray) == MS::kFailure)
+        return MS::kFailure;
+
+    // Input vector
+    MFloatVector inVector = data.inputValue(aInVector).asFloatVector();
+
+    // TODO: Normals or Vector switch
+    //
+
+    MFnArrayAttrsData outDynamicArray;
+    outDynamicArray.create();
+
+    // Copy data to new array
+    dynArrayUtils::copyDynArray(inDynamicArray, outDynamicArray);
+
+    // Note, This is a direct pointer
+    MVectorArray outPointArray = outDynamicArray.vectorArray("position");
+
+    // Intersection stuff
+    MFloatPoint raySource;
+    MFloatPoint hitPoint;
+
+    for(int i = 0; i < outPointArray.length(); i++)
+    {
+        raySource = MFloatPoint(outPointArray[i].x,
+                                outPointArray[i].y,
+                                outPointArray[i].z);
+
+        bool hit = fnMesh.closestIntersection(
+                    raySource,
+                    inVector,
+                    NULL,
+                    NULL,
+                    false,
+                    MSpace::kWorld,
+                    1000,
+                    false,
+                    NULL,
+                    hitPoint,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL);
+
+        if (hit)
+        {
+            outPointArray[i].x = hitPoint.x;
+            outPointArray[i].y = hitPoint.y;
+            outPointArray[i].z = hitPoint.z;
+        }
+    }
+
+    // Set output data
+    MDataHandle outDynamicArrayHandle = data.outputValue(aOutDynamicArray);
+    outDynamicArrayHandle.set(outDynamicArray.object());
+
+    // Set clean
+    data.setClean(aOutDynamicArray);
 
     return stat;
 }
