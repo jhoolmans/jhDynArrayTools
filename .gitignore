@@ -9,3 +9,5 @@ build/*
 *.o
 *.a
 CMakeLists.txt.user
+
+*.autosave
