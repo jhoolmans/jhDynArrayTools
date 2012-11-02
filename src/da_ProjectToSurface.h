@@ -62,6 +62,7 @@ public:
     // inputs
     static MObject aInDynamicArray;
     static MObject aInVector;
+    static MObject aInSurface;
 
     // controls
     static MObject aUseNormals;

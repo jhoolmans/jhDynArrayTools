@@ -23,6 +23,7 @@
 // Static Attributes
 //
 MObject DA_ProjectToSurface::aInDynamicArray;
+MObject DA_ProjectToSurface::aInSurface;
 MObject DA_ProjectToSurface::aInVector;
 MObject DA_ProjectToSurface::aUseNormals;
 MObject DA_ProjectToSurface::aOutDynamicArray;
@@ -46,6 +47,11 @@ MStatus DA_ProjectToSurface::initialize()
     //
     aInDynamicArray = tAttr.create("inDynamicArray", "ida", MFnData::kDynArrayAttrs);
     stat = addAttribute(aInDynamicArray);
+    CHECK_MSTATUS(stat);
+
+    // Limit to be mesh for now
+    aInSurface = tAttr.create("inSurface", "isrf", MFnData::kMesh);
+    stat = addAttribute(aInSurface);
     CHECK_MSTATUS(stat);
 
     aInVector = nAttr.createPoint("inVector", "ivec");
