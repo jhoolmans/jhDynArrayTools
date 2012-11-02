@@ -184,8 +184,12 @@ MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
 // Validate if array matches our requirements
 MStatus DA_ProjectToSurface::validateArray(MFnArrayAttrsData& array)
 {
+    // Should have position of type vectorArray
     MStatus stat;
-
-    return stat;
+    MFnArrayAttrsData::Type arrayType;
+    if(array.checkArrayExist(MString("position"), arrayType))
+        if (arrayType == MFnArrayAttrsData::kVectorArray)
+            return MS::kSuccess;
+    return MS::kFailure;
 }
 
