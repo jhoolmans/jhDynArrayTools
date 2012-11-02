@@ -182,7 +182,7 @@ MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
 
 
 // Validate if array matches our requirements
-MStatus DA_ProjectToSurface::validateArray(const MFnArrayAttrsData& array)
+MStatus DA_ProjectToSurface::validateArray(MFnArrayAttrsData& array)
 {
     MStatus stat;
 

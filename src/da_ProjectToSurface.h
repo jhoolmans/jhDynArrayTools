@@ -57,7 +57,7 @@ public:
     static MStatus initialize();
 
     virtual MStatus compute(const MPlug &plug, MDataBlock &data);
-    MStatus validateArray(const MFnArrayAttrsData &array);
+    MStatus validateArray(MFnArrayAttrsData &array);
 
     static MTypeId id;
 
