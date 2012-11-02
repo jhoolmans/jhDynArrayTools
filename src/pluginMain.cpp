@@ -40,6 +40,12 @@ MStatus initializePlugin(MObject obj)
                         DA_IndexByRadius::creator,
                         DA_IndexByRadius::initialize);
 
+    // Project To Surface
+    plugin.registerNode("daProjectToSurface",
+                        DA_ProjectToSurface::id,
+                        DA_ProjectToSurface::creator,
+                        DA_ProjectToSurface::initialize);
+
     return MS::kSuccess;
 }
 
@@ -51,6 +57,9 @@ MStatus uninitializePlugin(MObject obj)
 
     // Index by Radius
     plugin.deregisterNode(DA_IndexByRadius::id);
+
+    // Project To Surface
+    plugin.deregisterNode(DA_ProjectToSurface::id);
 
     return MS::kSuccess;
 }
