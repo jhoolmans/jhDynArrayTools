@@ -8,3 +8,4 @@ build/*
 *.bundle
 *.o
 *.a
+CMakeLists.txt.user

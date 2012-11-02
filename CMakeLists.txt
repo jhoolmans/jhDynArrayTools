@@ -27,20 +27,22 @@ FIND_PACKAGE( Maya REQUIRED )
 FIND_PACKAGE( Boost REQUIRED )
 
 SET( dynArrayTools_SRCS
+	src/da_ProjectToSurface.cpp
 	src/da_IndexByRadius.cpp
 	src/dynArrayUtils.cpp
 	src/pluginMain.cpp
 )
 
 SET( dynArrayTools_H
-    src/da_IndexByRadius.h
-    src/dynArrayUtils.h
+	src/da_ProjectToSurface.h
+	src/da_IndexByRadius.h
+	src/dynArrayUtils.h
 )
 
 INCLUDE_DIRECTORIES(
 	${PUBLIC_INCLUDE_DIRS}
 	${dynArrayTools_SOURCE_DIR}/src
-	${MAYA_INCLUDE_DIR} 
+	${MAYA_INCLUDE_DIR}
 )
 
 
