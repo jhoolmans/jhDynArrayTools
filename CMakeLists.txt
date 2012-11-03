@@ -27,13 +27,15 @@ FIND_PACKAGE( Maya REQUIRED )
 FIND_PACKAGE( Boost REQUIRED )
 
 SET( dynArrayTools_SRCS
-	src/da_IndexByRadius.cpp
-	src/dynArrayUtils.cpp
-	src/pluginMain.cpp
+    src/da_IndexByRadius.cpp
+    src/da_GridGenerator.cpp
+    src/dynArrayUtils.cpp
+    src/pluginMain.cpp
 )
 
 SET( dynArrayTools_H
     src/da_IndexByRadius.h
+    src/da_GridGenerator.h
     src/dynArrayUtils.h
 )
 
