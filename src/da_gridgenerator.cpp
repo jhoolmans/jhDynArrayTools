@@ -19,9 +19,25 @@
 
 #include "da_GridGenerator.h"
 
+namespace DA_GridGeneratorPatterns
+{
+const MString NONE("Grid");
+const MString BRICK_U("Brick U");
+const MString BRICK_V("Brick V");
+}
+
 //
 // Static Attributes
 //
+
+MObject DA_GridGenerator::aWidth;
+MObject DA_GridGenerator::aHeight;
+MObject DA_GridGenerator::aResolutionX;
+MObject DA_GridGenerator::aResolutionY;
+MObject DA_GridGenerator::aResolution;
+MObject DA_GridGenerator::aPattern;
+
+MObject DA_GridGenerator::aOutDynamicArray;
 
 
 // Constructor
@@ -34,27 +50,64 @@ DA_GridGenerator::~DA_GridGenerator(){}
 MStatus DA_GridGenerator::initialize()
 {
     MStatus stat;
-
-    //
-    // Inputs
-    //
-
+    MFnCompoundAttribute cAttr;
+    MFnNumericAttribute nAttr;
+    MFnEnumAttribute eAttr;
+    MFnTypedAttribute tAttr;
 
     //
     // Controls
     //
+    aWidth = nAttr.create("width", "w", MFnNumericData::kDouble, 1.0);
+    stat = addAttribute(aWidth);
+    CHECK_MSTATUS(stat);
 
+    aHeight = nAttr.create("height", "h", MFnNumericData::kDouble, 1.0);
+    stat = addAttribute(aHeight);
+    CHECK_MSTATUS(stat);
+
+    aResolutionX = nAttr.create("resolutionX", "resx", MFnNumericData::kInt, 10);
+    aResolutionY = nAttr.create("resolutionY", "resy", MFnNumericData::kInt, 10);
+    aResolution = cAttr.create("resolution", "res");
+
+    stat = cAttr.addChild(aResolutionX);
+    CHECK_MSTATUS(stat);
+    stat = cAttr.addChild(aResolutionY);
+    CHECK_MSTATUS(stat);
+    stat = addAttribute(aResolution);
+    CHECK_MSTATUS(stat);
+
+
+    aPattern = eAttr.create("pattern","pat",0);
+    eAttr.addField(DA_GridGeneratorPatterns::NONE, 0);
+    eAttr.addField(DA_GridGeneratorPatterns::BRICK_U, 1);
+    eAttr.addField(DA_GridGeneratorPatterns::BRICK_V, 2);
+
+    stat = addAttribute(aPattern);
+    CHECK_MSTATUS(stat);
 
     //
     // Outputs
     //
 
+    aOutDynamicArray = tAttr.create("outDynamicArray", "oda", MFnData::kDynArrayAttrs);
+    tAttr.setWritable(false); // Just output
+    stat = addAttribute(aOutDynamicArray);
+    CHECK_MSTATUS(stat);
 
     //
     // Attributes affects
     //
 
+    attributeAffects(aWidth, aOutDynamicArray);
+    attributeAffects(aHeight, aOutDynamicArray);
 
+    attributeAffects(aResolutionX, aOutDynamicArray);
+    attributeAffects(aResolutionY, aOutDynamicArray);
+
+    attributeAffects(aPattern, aOutDynamicArray);
+
+    // Done
     return stat;
 }
 

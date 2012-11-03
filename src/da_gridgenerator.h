@@ -24,9 +24,14 @@
 #include <maya/MDataBlock.h>
 #include <maya/MDataHandle.h>
 #include <maya/MPlug.h>
+#include <maya/MString.h>
 
+#include <maya/MFnNumericAttribute.h>
+#include <maya/MFnEnumAttribute.h>
+#include <maya/MFnCompoundAttribute.h>
+#include <maya/MFnTypedAttribute.h>
 
-class DA_GridGenerator
+class DA_GridGenerator : MPxNode
 {
 public:
     DA_GridGenerator();
@@ -38,6 +43,16 @@ public:
 
 public:
     static MTypeId id;
+
+    // No inputs, only controls and output
+    static MObject aWidth;
+    static MObject aHeight;
+    static MObject aResolutionX;
+    static MObject aResolutionY;
+    static MObject aResolution;
+    static MObject aPattern;
+
+    static MObject aOutDynamicArray;
 };
 
 #endif // DA_GRIDGENERATOR_H
