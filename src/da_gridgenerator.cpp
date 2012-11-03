@@ -144,8 +144,8 @@ MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
     //
     // Create grid
     //
-    double xOffset = dWidth / (double)iResolutionX;
-    double yOffset = dHeight / (double)iResolutionY;
+    double xOffset = dWidth / ((double)iResolutionX - 1);
+    double yOffset = dHeight / ((double)iResolutionY - 1);
 
     for(int i = 0; i < iResolutionX; i++)
     {
