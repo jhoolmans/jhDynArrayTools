@@ -8,4 +8,6 @@ build/*
 *.bundle
 *.o
 *.a
+
+*.autosave
 *.user
