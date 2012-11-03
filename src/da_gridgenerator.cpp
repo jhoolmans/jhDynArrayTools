@@ -59,15 +59,27 @@ MStatus DA_GridGenerator::initialize()
     // Controls
     //
     aWidth = nAttr.create("width", "w", MFnNumericData::kDouble, 1.0);
+    nAttr.setMin(0.001);
+    nAttr.setChannelBox(true);
+    nAttr.setKeyable(true);
     stat = addAttribute(aWidth);
     CHECK_MSTATUS(stat);
 
     aHeight = nAttr.create("height", "h", MFnNumericData::kDouble, 1.0);
+    nAttr.setMin(0.001);
+    nAttr.setChannelBox(true);
+    nAttr.setKeyable(true);
     stat = addAttribute(aHeight);
     CHECK_MSTATUS(stat);
 
     aResolutionX = nAttr.create("resolutionX", "resx", MFnNumericData::kInt, 10);
+    nAttr.setMin(2);
+    nAttr.setChannelBox(true);
+    nAttr.setKeyable(true);
     aResolutionY = nAttr.create("resolutionY", "resy", MFnNumericData::kInt, 10);
+    nAttr.setMin(2);
+    nAttr.setChannelBox(true);
+    nAttr.setKeyable(true);
     aResolution = cAttr.create("resolution", "res");
 
     stat = cAttr.addChild(aResolutionX);
@@ -82,6 +94,8 @@ MStatus DA_GridGenerator::initialize()
     eAttr.addField(DA_GridGeneratorPatterns::NONE, 0);
     eAttr.addField(DA_GridGeneratorPatterns::BRICK_U, 1);
     eAttr.addField(DA_GridGeneratorPatterns::BRICK_V, 2);
+    eAttr.setChannelBox(true);
+    eAttr.setKeyable(true);
 
     stat = addAttribute(aPattern);
     CHECK_MSTATUS(stat);
