@@ -151,7 +151,15 @@ MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
     {
         for(int j = 0; j < iResolutionY; j++)
         {
-            outPositionPP.append( MVector(xOffset * i, 0.0, yOffset * j) );
+            MVector position;
+            position.x = -dWidth / 2;
+            position.y = 0;
+            position.z = -dHeight / 2;
+
+            position.x += xOffset * i;
+            position.z += yOffset * j;
+
+            outPositionPP.append( position );
         }
     }
 
