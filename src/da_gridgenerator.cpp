@@ -120,6 +120,51 @@ void * DA_GridGenerator::creator()
 MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
 {
     MStatus stat;
+    if (plug != aOutDynamicArray)
+        return MS::kFailure;
 
+    //
+    // Control Inputs
+    //
+    double dWidth = data.inputValue(aWidth).asDouble();
+    double dHeight = data.inputValue(aHeight).asDouble();
+
+    int iResolutionX = data.inputValue(aResolutionX).asInt();
+    int iResolutionY = data.inputValue(aResolutionY).asInt();
+
+    short ePattern = data.inputValue(aPattern).asShort();
+
+    // Create output
+    MFnArrayAttrsData fnOutDynamicArray;
+    fnOutDynamicArray.create();
+
+    // Create position data
+    MVectorArray outPositionPP = fnOutDynamicArray.vectorArray("position");
+
+    //
+    // Create grid
+    //
+    double xOffset = dWidth / (double)iResolutionX;
+    double yOffset = dHeight / (double)iResolutionY;
+
+    for(int i = 0; i < iResolutionX; i++)
+    {
+        for(int j = 0; j < iResolutionY; j++)
+        {
+            outPositionPP.append( MVector(xOffset * i, 0.0, yOffset * j) );
+        }
+    }
+
+
+    //
+    // Set output data
+    //
+    MDataHandle outArray = data.outputValue(aOutDynamicArray);
+    outArray.set(fnOutDynamicArray.object());
+
+    // Set plug to clean
+    data.setClean(aOutDynamicArray);
+
+    // Done
     return MS::kSuccess;
 }

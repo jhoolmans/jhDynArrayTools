@@ -31,6 +31,10 @@
 #include <maya/MFnCompoundAttribute.h>
 #include <maya/MFnTypedAttribute.h>
 
+#include <maya/MFnArrayAttrsData.h>
+#include <maya/MVector.h>
+#include <maya/MVectorArray.h>
+
 class DA_GridGenerator : MPxNode
 {
 public:
