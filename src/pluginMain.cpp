@@ -24,6 +24,9 @@
 #include "da_IndexByRadius.h"
 MTypeId DA_IndexByRadius::id(0x001178BF);
 
+#include "da_ProjectToSurface.h"
+MTypeId DA_ProjectToSurface::id(0x001178BE);
+
 #include "da_GridGenerator.h"
 MTypeId DA_GridGenerator::id(0x001178BD);
 
@@ -39,6 +42,12 @@ MStatus initializePlugin(MObject obj)
                         DA_IndexByRadius::id,
                         DA_IndexByRadius::creator,
                         DA_IndexByRadius::initialize);
+
+    // Project To Surface
+    plugin.registerNode("daProjectToSurface",
+                        DA_ProjectToSurface::id,
+                        DA_ProjectToSurface::creator,
+                        DA_ProjectToSurface::initialize);
 
     // Grid Generator
     plugin.registerNode("daGridGenerator",
@@ -57,6 +66,9 @@ MStatus uninitializePlugin(MObject obj)
 
     // Index by Radius
     plugin.deregisterNode(DA_IndexByRadius::id);
+
+    // Project To Surface
+    plugin.deregisterNode(DA_ProjectToSurface::id);
 
     // Grid Generator
     plugin.deregisterNode(DA_GridGenerator::id);

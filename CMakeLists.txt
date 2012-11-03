@@ -27,39 +27,40 @@ FIND_PACKAGE( Maya REQUIRED )
 FIND_PACKAGE( Boost REQUIRED )
 
 SET( dynArrayTools_SRCS
+    src/da_ProjectToSurface.cpp
     src/da_IndexByRadius.cpp
     src/da_GridGenerator.cpp
     src/dynArrayUtils.cpp
     src/pluginMain.cpp
 )
-
 SET( dynArrayTools_H
+    src/da_ProjectToSurface.h
     src/da_IndexByRadius.h
     src/da_GridGenerator.h
     src/dynArrayUtils.h
 )
 
 INCLUDE_DIRECTORIES(
-	${PUBLIC_INCLUDE_DIRS}
-	${dynArrayTools_SOURCE_DIR}/src
-	${MAYA_INCLUDE_DIR} 
+    ${PUBLIC_INCLUDE_DIRS}
+    ${dynArrayTools_SOURCE_DIR}/src
+    ${MAYA_INCLUDE_DIR}
 )
 
 
 # create the plugin
 ADD_LIBRARY( dynArrayTools_plugin SHARED
-  ${dynArrayTools_SRCS}
-  ${dynArrayTools_H}
+    ${dynArrayTools_SRCS}
+    ${dynArrayTools_H}
 )
 
 TARGET_LINK_LIBRARIES( dynArrayTools_plugin
-   ${MAYA_Foundation_LIBRARY}
-   ${MAYA_OpenMaya_LIBRARY}
+    ${MAYA_Foundation_LIBRARY}
+    ${MAYA_OpenMaya_LIBRARY}
 )
 
 SET_TARGET_PROPERTIES( dynArrayTools_plugin PROPERTIES
-  OUTPUT_NAME dynArrayTools
-  CLEAN_DIRECT_OUTPUT 1
+    OUTPUT_NAME dynArrayTools
+    CLEAN_DIRECT_OUTPUT 1
 )
 
 # this is a macro defined in FindMaya that sets up our plugin with standard Maya build settings
