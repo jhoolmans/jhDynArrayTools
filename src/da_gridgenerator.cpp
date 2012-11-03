@@ -156,6 +156,11 @@ MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
             position.y = 0;
             position.z = -dHeight / 2;
 
+            if (ePattern == 1)
+                position.x += (xOffset/2) * double(j % 2);
+            if (ePattern == 2)
+                position.z += (yOffset/2) * double(i % 2);
+
             position.x += xOffset * i;
             position.z += yOffset * j;
 
