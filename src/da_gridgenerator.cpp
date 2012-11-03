@@ -147,6 +147,13 @@ MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
     double xOffset = dWidth / ((double)iResolutionX - 1);
     double yOffset = dHeight / ((double)iResolutionY - 1);
 
+    // Keep brick pattern in range
+    if (ePattern == 1)
+        xOffset -= (xOffset/2) / double(iResolutionX);
+    if (ePattern == 2)
+        yOffset -= (yOffset/2) / double(iResolutionY);
+
+    // Generate grid
     for(int i = 0; i < iResolutionX; i++)
     {
         for(int j = 0; j < iResolutionY; j++)
@@ -156,6 +163,7 @@ MStatus DA_GridGenerator::compute(const MPlug &plug, MDataBlock &data)
             position.y = 0;
             position.z = -dHeight / 2;
 
+            // Pattern offset
             if (ePattern == 1)
                 position.x += (xOffset/2) * double(j % 2);
             if (ePattern == 2)
