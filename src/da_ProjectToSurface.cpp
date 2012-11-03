@@ -51,6 +51,8 @@ MStatus DA_ProjectToSurface::initialize()
 
     // Limit to be mesh for now
     aInSurface = tAttr.create("inSurface", "isrf", MFnData::kMesh);
+    tAttr.setStorable(false);
+    tAttr.setCached(false);
     stat = addAttribute(aInSurface);
     CHECK_MSTATUS(stat);
 
