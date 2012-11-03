@@ -55,6 +55,7 @@ MStatus DA_ProjectToSurface::initialize()
     CHECK_MSTATUS(stat);
 
     aInVector = nAttr.createPoint("inVector", "ivec");
+    nAttr.setDefault(0.0, 1.0, 0.0);
     stat = addAttribute(aInVector);
     CHECK_MSTATUS(stat);
 
