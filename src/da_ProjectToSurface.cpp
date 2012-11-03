@@ -104,20 +104,36 @@ MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
     // Get inputs
     //
 
-    // Surface
-    MDataHandle inSurfaceData = data.inputValue(aInSurface);
-    if(inSurfaceData.type() != MFnData::kMesh)
-        return MS::kFailure;
-
-    MObject inSurfaceMesh = inSurfaceData.asMesh();
-    MFnMesh fnMesh(inSurfaceMesh);
-
+    //
     // Dynamic Array
+    //
     MDataHandle inDynamicArrayData = data.inputValue(aInDynamicArray);
     if(inDynamicArrayData.type() != MFnData::kDynArrayAttrs)
         return MS::kFailure;
 
     MFnArrayAttrsData inDynamicArray(inDynamicArrayData.data());
+
+    // Create output based on input
+    MFnArrayAttrsData outDynamicArray;
+    outDynamicArray.create();
+
+    // Copy data to new array
+    dynArrayUtils::copyDynArray(inDynamicArray, outDynamicArray);
+
+    //
+    // Surface
+    //
+    MDataHandle inSurfaceData = data.inputValue(aInSurface);
+    if(inSurfaceData.type() != MFnData::kMesh) {
+        // Passthrough
+        MDataHandle outDynamicArrayHandle = data.outputValue(aOutDynamicArray);
+        outDynamicArrayHandle.set(outDynamicArray.object());
+        data.setClean(aOutDynamicArray);
+        return MS::kSuccess;
+    }
+
+    MObject inSurfaceMesh = inSurfaceData.asMesh();
+    MFnMesh fnMesh(inSurfaceMesh);
 
     // Validate array
     if(validateArray(inDynamicArray) == MS::kFailure)
@@ -128,12 +144,6 @@ MStatus DA_ProjectToSurface::compute(const MPlug &plug, MDataBlock &data)
 
     // TODO: Normals or Vector switch
     //
-
-    MFnArrayAttrsData outDynamicArray;
-    outDynamicArray.create();
-
-    // Copy data to new array
-    dynArrayUtils::copyDynArray(inDynamicArray, outDynamicArray);
 
     // Note, This is a direct pointer
     MVectorArray outPointArray = outDynamicArray.vectorArray("position");
