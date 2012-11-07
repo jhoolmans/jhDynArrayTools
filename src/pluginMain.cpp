@@ -20,6 +20,8 @@
 #include <maya/MFnPlugin.h>
 #include <maya/MTypeId.h>
 
+#include <maya/MGlobal.h>
+
 
 #include "da_IndexByRadius.h"
 MTypeId DA_IndexByRadius::id(0x001178BF);
@@ -37,8 +39,18 @@ MTypeId DA_Randomizer::id(0x001178BC);
 MStatus initializePlugin(MObject obj)
 {
     MStatus stat;
-    MFnPlugin plugin(obj, "Jeroen Hoolmans", "0.2", "Any", &stat);
+    MFnPlugin plugin(obj, "Jeroen Hoolmans", "0.3", "Any", &stat);
     CHECK_MSTATUS(stat);
+
+    // Output GPL license
+    MGlobal::displayInfo("");
+    MGlobal::displayInfo("jhDynArrayTools Copyright (C) 2012 Jeroen Hoolmans");
+    MGlobal::displayInfo("This program comes with ABSOLUTELY NO WARRANTY.");
+    MGlobal::displayInfo("This is free software, and you are welcome to redistribute it");
+    MGlobal::displayInfo("under certain conditions.");
+    MGlobal::displayInfo("Visit http://jhoolmans.github.com/jhDynArrayTools for more info.");
+    MGlobal::displayInfo("");
+    //
 
     // Index by Radius
     plugin.registerNode("daIndexByRadius",
