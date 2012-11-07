@@ -30,6 +30,9 @@ MTypeId DA_ProjectToSurface::id(0x001178BE);
 #include "da_GridGenerator.h"
 MTypeId DA_GridGenerator::id(0x001178BD);
 
+#include "da_Randomizer.h"
+MTypeId DA_Randomizer::id(0x001178BC);
+
 
 MStatus initializePlugin(MObject obj)
 {
@@ -55,6 +58,12 @@ MStatus initializePlugin(MObject obj)
                         DA_GridGenerator::creator,
                         DA_GridGenerator::initialize);
 
+    // Randomizer
+    plugin.registerNode("daRandomizer",
+                        DA_Randomizer::id,
+                        DA_Randomizer::creator,
+                        DA_Randomizer::initialize);
+
     return MS::kSuccess;
 }
 
@@ -72,6 +81,9 @@ MStatus uninitializePlugin(MObject obj)
 
     // Grid Generator
     plugin.deregisterNode(DA_GridGenerator::id);
+
+    // Randomizer
+    plugin.deregisterNode(DA_Randomizer::id);
 
     return MS::kSuccess;
 }
